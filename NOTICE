@@ -1,0 +1,20 @@
+Dream Nests
+Copyright (c) 2026 Carter (2three1y). MIT license (see LICENSE).
+
+This project includes or follows work from these repos, all starred by 2three1y:
+
+1. nostr-tools, https://github.com/nbd-wtf/nostr-tools
+   Unlicense (public domain). The browser bundle, version 2.25.2, is included
+   unchanged in vendor/nostr-tools.bundle.js. Full text: licenses/nostr-tools.txt
+
+2. Nostr Nests, https://github.com/nostrnests/nests
+   MIT License, Copyright (c) 2024 Nostr Nests. The room format (kind 30312),
+   presence (kind 10312), live chat (kind 1311), the live-room rules and
+   room links are re-implemented in app.js following Nests' code.
+   Full text: licenses/nests.txt
+
+3. Corny Chat, https://github.com/vicariousdrama/cornychat
+   AGPL-3.0. Reference only: Dream Nests reads the public kind 30311 events
+   Corny Chat publishes and links to its rooms. No Corny Chat code is copied.
+
+Earcons are synthesized at runtime with the Web Audio API; no sound files are included.

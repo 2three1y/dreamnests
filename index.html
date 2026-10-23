@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dream Nests: live Nostr audio rooms that work with VoiceOver</title>
+<meta name="description" content="An accessible way to find and listen to live audio rooms on Nostr. Built by Carter (2three1y) from starred open-source repos.">
+<meta name="color-scheme" content="dark light">
+<link rel="stylesheet" href="styles.css">
+<script src="vendor/nostr-tools.bundle.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="site-header">
+  <h1>Dream Nests</h1>
+  <p class="tagline">Live audio rooms on Nostr, made to work with VoiceOver and TalkBack.</p>
+  <nav aria-label="Sections">
+    <ul class="nav-list">
+      <li><a href="#/">Rooms</a></li>
+      <li><a href="#settings-heading">Settings</a></li>
+      <li><a href="#honest-heading">What works here</a></li>
+      <li><a href="#credits-heading">Starred credits</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+  <section id="lobby" aria-labelledby="lobby-heading">
+    <h2 id="lobby-heading" tabindex="-1">Live rooms</h2>
+    <p id="lobby-status">Checking Nostr relays for live rooms.</p>
+    <p class="actions">
+      <button type="button" id="refresh" class="btn primary">Check again</button>
+    </p>
+    <div id="lobby-lists">
+      <h3 id="audio-heading">Audio rooms</h3>
+      <p id="audio-empty" class="empty" hidden>No live audio rooms right now. Nests and Corny Chat rooms come and go, so try again in a bit.</p>
+      <ul id="audio-list" class="room-list" aria-labelledby="audio-heading"></ul>
+
+      <div id="streams-block">
+        <h3 id="streams-heading">Other live streams you can listen to</h3>
+        <p class="hint">Radio shows and video streams from Nostr live apps. Most play right here, audio only.</p>
+        <p id="streams-empty" class="empty" hidden>No other live streams found.</p>
+        <ul id="streams-list" class="room-list" aria-labelledby="streams-heading"></ul>
+      </div>
+
+      <h3 id="planned-heading">Coming up</h3>
+      <p id="planned-empty" class="empty" hidden>Nothing scheduled that we can see.</p>
+      <ul id="planned-list" class="room-list" aria-labelledby="planned-heading"></ul>
+
+      <details id="ended-block">
+        <summary>Recently ended</summary>
+        <ul id="ended-list" class="room-list" aria-label="Recently ended rooms"></ul>
+      </details>
+      <p id="filtered-note" class="hint" hidden></p>
+    </div>
+  </section>
+
+  <section id="room" aria-labelledby="room-title" hidden>
+    <p><a href="#/" id="back-link" class="back">Back to all rooms</a></p>
+    <h2 id="room-title" tabindex="-1">Room</h2>
+    <p id="room-meta" class="meta"></p>
+    <p id="room-summary"></p>
+    <div class="join">
+      <button type="button" id="listen-btn" class="btn huge" hidden>Listen here</button>
+      <a id="open-link" class="btn huge secondary" href="#" target="_blank" rel="noopener noreferrer" hidden>Open room</a>
+      <p id="join-note" class="note"></p>
+      <audio id="player" preload="none" controls hidden></audio>
+    </div>
+
+    <div id="room-live" hidden>
+    <h3 id="chat-heading">Live chat</h3>
+    <p class="actions">
+      <button type="button" id="chat-mute" class="btn" aria-pressed="false">Mute chat announcements</button>
+    </p>
+    <p id="chat-status" class="hint">Loading chat.</p>
+    <ol id="chat-list" class="chat" aria-labelledby="chat-heading"></ol>
+
+    <h3 id="activity-heading">Room activity</h3>
+    <p class="hint">Hand raises, mics turning on and the room ending, newest first. Each one also plays its earcon.</p>
+    <ol id="activity-list" class="activity" aria-labelledby="activity-heading"></ol>
+    </div>
+  </section>
+
+  <section id="settings" aria-labelledby="settings-heading">
+    <h2 id="settings-heading" tabindex="-1">Settings</h2>
+    <fieldset>
+      <legend>Sounds and announcements</legend>
+      <p><label><input type="checkbox" id="opt-earcons" checked> Play earcons (mic on, hand raised, room ended)</label></p>
+      <p><label><input type="checkbox" id="opt-chat-tick"> Soft tick for each new chat message</label></p>
+      <p><button type="button" id="test-earcons" class="btn">Play all earcons</button></p>
+    </fieldset>
+    <fieldset>
+      <legend>What to show</legend>
+      <p><label><input type="checkbox" id="opt-streams" checked> Show other live streams (radio and video streams, audio only)</label></p>
+      <p><label><input type="checkbox" id="opt-sensitive"> Show rooms and messages marked sensitive or NSFW</label></p>
+    </fieldset>
+    <fieldset>
+      <legend>Relays</legend>
+      <p class="hint">Dream Nests only reads from these relays. It never posts anything.</p>
+      <ul id="relay-list" class="relay-list"></ul>
+      <form id="relay-form" class="relay-form">
+        <label for="relay-input">Add a relay address (starts with wss://)</label>
+        <input id="relay-input" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="wss://relay.example.com">
+        <button type="submit" class="btn">Add relay</button>
+      </form>
+      <p><button type="button" id="relay-reset" class="btn">Reset to the safe default list</button></p>
+    </fieldset>
+  </section>
+
+  <section id="honest" aria-labelledby="honest-heading">
+    <h2 id="honest-heading" tabindex="-1">What works here, honestly</h2>
+    <h3>Listen-only, right here</h3>
+    <ul>
+      <li>Live streams that publish a public HLS stream (a link ending in .m3u8) play in this page, audio only. That covers zap.stream, Shosho and most Nostr radio streams.</li>
+      <li>Safari and every browser on iPhone play these natively. Chrome on Android or a computer may not, and then the button opens the stream's own page instead.</li>
+    </ul>
+    <h3>Opens the room's own app</h3>
+    <ul>
+      <li>Nests rooms stream with a newer technology (Media over QUIC) that only the Nests app can play, so Listen opens the room on nostrnests.com.</li>
+      <li>Corny Chat and HiveTalk rooms open on their own sites too.</li>
+    </ul>
+    <h3>Full speaking</h3>
+    <ul>
+      <li>Talking, raising your own hand and posting chat need the room's own app and a Nostr login. Dream Nests is read-only: no login, no keys, nothing posted.</li>
+    </ul>
+    <h3>Earcons</h3>
+    <ul>
+      <li>Hand raised: from Nests presence events, when someone's hand goes up.</li>
+      <li>Mic on: from Nests presence events, when a speaker unmutes. This is not true voice detection, which only the Nests app can hear.</li>
+      <li>Room ended: when the room's event changes to ended.</li>
+      <li>Corny Chat and live streams don't publish hand or mic events, so only room ended and chat work there.</li>
+    </ul>
+    <h3>Safety</h3>
+    <ul>
+      <li>Rooms and messages marked sensitive, NSFW or adult are hidden by default, including ones that only say NSFW in the title.</li>
+      <li>Links and images in chat are shown as plain text, never loaded.</li>
+    </ul>
+    <h3>Keyboard</h3>
+    <ul>
+      <li>Every control is a normal link or button. Use Tab, Enter and Space, or your screen reader's heading and link navigation.</li>
+      <li>Each room in the list is a heading, so you can jump room to room by heading.</li>
+      <li>Escape goes back to the room list from inside a room.</li>
+    </ul>
+  </section>
+
+  <section id="credits" aria-labelledby="credits-heading">
+    <h2 id="credits-heading" tabindex="-1">Starred credits</h2>
+    <p>Built only from repos starred by 2three1y. Each one is listed with its license and what it does here.</p>
+    <h3>nostr-tools</h3>
+    <ul>
+      <li>Repo: <a href="https://github.com/nbd-wtf/nostr-tools">github.com/nbd-wtf/nostr-tools</a></li>
+      <li>Author: fiatjaf and contributors</li>
+      <li>License: Unlicense (public domain)</li>
+      <li>Used for: connecting to relays, reading and verifying events, naddr links. Its browser bundle (version 2.25.2) is included unchanged.</li>
+    </ul>
+    <h3>Nostr Nests</h3>
+    <ul>
+      <li>Repo: <a href="https://github.com/nostrnests/nests">github.com/nostrnests/nests</a></li>
+      <li>Author: Nostr Nests</li>
+      <li>License: MIT</li>
+      <li>Used for: the room format (kind 30312), presence with hand and mic state (kind 10312), live chat (kind 1311), the live-room rules and room links. Logic is re-written in plain JavaScript, following Nests' own.</li>
+    </ul>
+    <h3>Corny Chat</h3>
+    <ul>
+      <li>Repo: <a href="https://github.com/vicariousdrama/cornychat">github.com/vicariousdrama/cornychat</a></li>
+      <li>Author: vicariousdrama and the Jam contributors</li>
+      <li>License: AGPL-3.0</li>
+      <li>Used for: reference only. Dream Nests reads the public kind 30311 events Corny Chat publishes and links to its rooms. No Corny Chat code is copied, so Dream Nests stays MIT.</li>
+    </ul>
+    <p>Earcons are generated live with the Web Audio API, so there are no sound files to license. Full license texts are in the NOTICE file in the repo.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>Made by Carter (2three1y). <a href="https://github.com/2three1y/dream-nests">Source on GitHub</a>, MIT license.</p>
+</footer>
+
+<div id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+<noscript><p class="noscript">Dream Nests needs JavaScript to read Nostr relays.</p></noscript>
+</body>
+</html>

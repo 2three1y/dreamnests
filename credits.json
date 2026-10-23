@@ -1,0 +1,33 @@
+{
+  "project": "Dream Nests",
+  "license": "MIT",
+  "credits": [
+    {
+      "name": "nostr-tools",
+      "repo": "https://github.com/nbd-wtf/nostr-tools",
+      "author": "fiatjaf and contributors (nbd-wtf)",
+      "license": "Unlicense",
+      "used_for": "connecting to relays, reading and verifying events, naddr links (browser bundle 2.25.2, unchanged)",
+      "notice": "none required (public domain); credited anyway",
+      "starred": "checked Oct 23, 2026"
+    },
+    {
+      "name": "Nostr Nests",
+      "repo": "https://github.com/nostrnests/nests",
+      "author": "Nostr Nests",
+      "license": "MIT",
+      "used_for": "room format (30312), presence with hand and mic state (10312), live chat (1311), live-room rules, room links",
+      "notice": "Copyright (c) 2024 Nostr Nests plus the MIT text, in licenses/nests.txt",
+      "starred": "checked Oct 23, 2026"
+    },
+    {
+      "name": "Corny Chat",
+      "repo": "https://github.com/vicariousdrama/cornychat",
+      "author": "vicariousdrama",
+      "license": "AGPL-3.0",
+      "used_for": "reference only: reading its public kind 30311 room events and linking to its rooms; no code copied",
+      "notice": "none (no code used)",
+      "starred": "checked Oct 23, 2026"
+    }
+  ]
+}
