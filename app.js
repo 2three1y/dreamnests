@@ -311,14 +311,14 @@
     }
     $('ended-block').hidden = !ended.length;
     $('streams-block').hidden = !settings.streams;
-    var msg = plural(audio.length, 'live audio room', 'live audio rooms');
-    if (settings.streams) msg += ' and ' + plural(streams.length, 'other live stream', 'other live streams');
+    var msg = audio.length ? plural(audio.length, 'live audio room', 'live audio rooms') : 'No live audio rooms right now';
+    if (settings.streams) msg += ', ' + plural(streams.length, 'other live stream', 'other live streams');
     msg += '. Updated ' + new Date().toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }) + '.';
-    $('lobby-status').textContent = 'Found ' + msg;
+    $('lobby-status').textContent = msg;
     var fn = $('filtered-note');
     fn.hidden = !hiddenCount;
     fn.textContent = hiddenCount ? plural(hiddenCount, 'room was', 'rooms were') + ' hidden because ' + (hiddenCount === 1 ? 'it is' : 'they are') + ' marked sensitive or NSFW. You can change this in Settings.' : '';
-    if (!renderLobby.announced && !currentRoom) { renderLobby.announced = true; announce('Found ' + msg); }
+    if (!renderLobby.announced && !currentRoom) { renderLobby.announced = true; announce(msg); }
   }
   // Update lists without yanking focus: a screen reader user sitting on a room link keeps their place.
   var deferredRender = false;
