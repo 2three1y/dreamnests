@@ -2,9 +2,9 @@
 
 Live audio rooms on Nostr, made to work with VoiceOver and TalkBack. Think Twitter Spaces that a screen reader can actually use.
 
-Open it: https://2three1y.github.io/dream-nests/
+Open it: https://2three1y.github.io/dreamnests/
 
-Made by Carter (2three1y).
+I made this. Carter (2three1y).
 
 ## What it does
 
